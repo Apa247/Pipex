@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 22:17:36 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/19 22:25:54 by daparici         ###   ########.fr       */
+/*   Updated: 2022/09/20 19:59:29 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <fcntl.h>
 # include <limits.h>
 # include "./Libft/libft.h"
-# include "./GetNextLine/get_next_line.h"
+//# include "./GetNextLine/get_next_line.h"
 # include "./printf/ft_printf.h"
 # include <OpenGL/gl.h>
 # include <OpenGl/glu.h>
@@ -37,8 +37,17 @@
 
 typedef struct s_pipex
 {
-    pid_t   pid1;
-    pid_t   pid2;
-    int     pipe1[2];
-    int     pipe2[2];
-}           t_pipex;
+	pid_t	pid1;
+	pid_t	pid2;
+	int		infile;
+	int		outfile;
+	int		pipe[2];
+	char	*path;
+	char	**cmd_path;
+	char	**cmd_arg;
+	char	*cmd;
+}		t_pipex;
+
+int	main(int argc, char **argv, char **env);
+int	msg_error(char *msg);
+#endif
