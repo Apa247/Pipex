@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 22:17:36 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/20 19:59:29 by daparici         ###   ########.fr       */
+/*   Updated: 2022/09/25 20:27:01 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ typedef struct s_pipex
 	char	*cmd;
 }		t_pipex;
 
-int	main(int argc, char **argv, char **env);
-int	msg_error(char *msg);
+int		main(int argc, char **argv, char **env);
+int		msg_error(char *msg);
+void	first_child(t_pipex *pipex, char **argv, char **envp);
+char	*find_cmd(char *cmd, char **path);
+void	free_child(t_pipex *pipex);
 #endif

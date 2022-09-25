@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:08:52 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/20 13:09:55 by daparici         ###   ########.fr       */
+/*   Updated: 2022/09/25 19:53:53 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,5 @@ char	*ft_strjoin(char *s1, const char *s2)
 		i2++;
 	}
 	str[i] = '\0';
-	free(s1);
 	return (str);
 }
