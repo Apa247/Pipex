@@ -6,13 +6,13 @@
 #    By: daparici <daparici@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/20 13:59:15 by daparici          #+#    #+#              #
-#    Updated: 2022/09/25 18:26:41 by daparici         ###   ########.fr        #
+#    Updated: 2022/09/26 15:51:46 by daparici         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra # -g -fsanitize=address -g3
+CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address -g3
 AR = ar rcs
 
 SRCS = pipex.c
