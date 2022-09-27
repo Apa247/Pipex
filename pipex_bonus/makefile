@@ -5,17 +5,17 @@
 #                                                     +:+ +:+         +:+      #
 #    By: daparici <daparici@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/09/20 13:59:15 by daparici          #+#    #+#              #
-#    Updated: 2022/09/27 19:45:54 by daparici         ###   ########.fr        #
+#    Created: 2022/09/27 19:54:49 by daparici          #+#    #+#              #
+#    Updated: 2022/09/27 19:54:59 by daparici         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = pipex
+NAME = pipex_bonus
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra# -g -fsanitize=address -g3
 AR = ar rcs
 
-SRCS = pipex.c pipex_utils.c
+SRCS = 
 
 LIBFT = ./Libft/libft.a
 

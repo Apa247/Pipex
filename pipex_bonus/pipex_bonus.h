@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/19 22:17:36 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/27 19:40:43 by daparici         ###   ########.fr       */
+/*   Created: 2022/09/27 19:54:54 by daparici          #+#    #+#             */
+/*   Updated: 2022/09/27 21:10:19 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <ctype.h>
 # include <stdio.h>
@@ -35,10 +35,13 @@
 /* waitpid, wait */
 # include <sys/wait.h>
 
-char	*find_paths(char **envp);
-char	*find_cmd(char *cmd, char **path);
+void	recursive_process(int process, int argc, char **argv, char **envp);
 void	first_child(int *pipe, char **argv, char **envp);
-void	second_child(int *pipe, char **argv, char **envp);
+void	mid_process(int pos, int *pipe, char **argv, char **envp);
+void	last_child(int *pipe, char **argv, char **envp);
 void	msg_error(char *msg);
 void	close_parent(int *pipe);
+char	*find_paths(char **envp);
+char	*find_cmd(char *cmd, char **path);
+
 #endif

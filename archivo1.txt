@@ -11,4 +11,4 @@ El análisis del espectro de la energía
 emitida por un cuerpo negro presentaba
 notables diferencias con lo que el modelo
 teórico de la física clásica predecía a finales
-del s XIX.
+del s XIX. 
