@@ -6,11 +6,11 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 20:53:28 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/27 20:57:39 by daparici         ###   ########.fr       */
+/*   Updated: 2022/09/28 17:09:35 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus"
+#include "pipex_bonus.h"
 
 void	msg_error(char *msg)
 {

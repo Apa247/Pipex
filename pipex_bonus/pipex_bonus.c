@@ -6,11 +6,11 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:55:49 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/27 21:11:37 by daparici         ###   ########.fr       */
+/*   Updated: 2022/09/28 18:15:30 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus"
+#include "pipex_bonus.h"
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -20,7 +20,6 @@ int	main(int argc, char **argv, char **envp)
 	if (argc < 5)
 		msg_error("Error number of parameters");
 	recursive_process(process, argc, argv, envp);
-	
 	return (0);
 }
 
@@ -28,25 +27,29 @@ void	recursive_process(int process, int argc, char **argv, char **envp)
 {
 	int	tub[2];
 	int	pid;
-	int	pos;
 
-	pos = argc - process;
 	pipe(tub);
 	pid = fork();
-	if (process == (argc - 3))
+	if (pid == 0)
 	{
-		first_child(tub, argv, envp);
-		process--;
-		recursive_process(process, argc, argv, envp);
+		if (process == 2)
+		{
+			first_child(tub, argv, envp);
+			process++;
+			recursive_process(process, argc, argv, envp);
+		}
+		if (process < argc - 2)
+		{
+			mid_process(process, tub, argv, envp);
+			printf("hola\n");
+			process++;
+			recursive_process(process, argc, argv, envp);
+		}
+		if (process == argc - 2)
+		{
+			last_child(process, tub, argv, envp);
+		}
 	}
-	if (process > 1)
-	{
-		mid_process(pos, pipe, argv, envp);
-		process--;
-		recursive_process(process, argc, argv, envp);
-	}
-	if (process == 1)
-		last_child(pipe, argv, envp);
 }
 
 void	first_child(int *pipe, char **argv, char **envp)
@@ -80,12 +83,12 @@ void	mid_process(int pos, int *pipe, char **argv, char **envp)
 	char	**ruts;
 	char	**cmd_arg;
 	char	*cmd;
-	int		file;
 
 	dup2(pipe[0], 0);
 	close(pipe[0]);
 	dup2(pipe[1], 1);
-	close([1]);
+	printf("hola\n");
+	close(pipe[1]);
 	path = find_paths(envp);
 	ruts = ft_split(path, ':');
 	cmd_arg = ft_split(argv[pos], ' ');
@@ -95,7 +98,7 @@ void	mid_process(int pos, int *pipe, char **argv, char **envp)
 	execve(cmd, cmd_arg, envp);
 }
 
-void	last_child(int *pipe, char **argv, char **envp)
+void	last_child(int pos, int *pipe, char **argv, char **envp)
 {
 	char	*path;
 	char	**ruts;
@@ -112,7 +115,7 @@ void	last_child(int *pipe, char **argv, char **envp)
 	close(file);
 	path = find_paths(envp);
 	ruts = ft_split(path, ':');
-	cmd_arg = ft_split(argv[3], ' ');
+	cmd_arg = ft_split(argv[pos], ' ');
 	cmd = find_cmd(cmd_arg[0], ruts);
 	if (!cmd)
 		msg_error("ERROR: comand not found");

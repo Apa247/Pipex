@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:54:54 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/27 21:10:19 by daparici         ###   ########.fr       */
+/*   Updated: 2022/09/28 17:07:31 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 void	recursive_process(int process, int argc, char **argv, char **envp);
 void	first_child(int *pipe, char **argv, char **envp);
 void	mid_process(int pos, int *pipe, char **argv, char **envp);
-void	last_child(int *pipe, char **argv, char **envp);
+void	last_child(int pos, int *pipe, char **argv, char **envp);
 void	msg_error(char *msg);
 void	close_parent(int *pipe);
 char	*find_paths(char **envp);
