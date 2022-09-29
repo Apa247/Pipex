@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 17:18:30 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/27 19:45:22 by daparici         ###   ########.fr       */
+/*   Updated: 2022/09/29 21:08:41 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main(int argc, char **argv, char **envp)
 	close(tub[1]);
 	pid = fork();
 	if (pid == -1)
-		msg_error("Error in first process");
+		msg_error("Error in second process");
 	if (pid == 0)
 		second_child(tub, argv, envp);
 	close_parent(tub);

@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:54:54 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/28 17:07:31 by daparici         ###   ########.fr       */
+/*   Updated: 2022/09/29 19:50:49 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,22 @@
 /* waitpid, wait */
 # include <sys/wait.h>
 
-void	recursive_process(int process, int argc, char **argv, char **envp);
-void	first_child(int *pipe, char **argv, char **envp);
-void	mid_process(int pos, int *pipe, char **argv, char **envp);
-void	last_child(int pos, int *pipe, char **argv, char **envp);
+typedef struct s_pipex
+{
+	int		**tub;
+	int		*pid;
+	char	*path;
+	char	**ruts;
+	int		file;
+	int		process;
+	int		argc_cp;
+	int		x;
+}		t_pipex;
+
+void	recursive_process(t_pipex *pipex, char **argv, char **envp);
+void	first_child(t_pipex *pipex, char **argv, char **envp);
+void	mid_process(t_pipex *pipex, char **argv, char **envp);
+void	last_child(t_pipex *pipex, char **argv, char **envp);
 void	msg_error(char *msg);
 void	close_parent(int *pipe);
 char	*find_paths(char **envp);

@@ -1,1 +1,14 @@
-       2
+/usr/local/bin/ls
+/usr/bin
+/bin
+/usr/sbin
+/sbin
+/usr/local/munkie prueba
+pipex.c
+pipex.h
+pipex.o
+pipex_antiguo.c
+pipex_bonus
+pipex_utils.c
+pipex_utils.o
+printf
