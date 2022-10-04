@@ -6,67 +6,80 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:55:49 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/29 21:39:55 by daparici         ###   ########.fr       */
+/*   Updated: 2022/10/04 18:59:38 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
+char	**envp_copy(char **envp)
+{
+	char	**envp_cp;
+	int		x;
+	int		y;
+
+	x = -1;
+	envp_cp = malloc(sizeof(char *) * ft_strlen_cp(envp));
+	while (envp[++x])
+	{
+		y = -1;
+		envp_cp[x] = malloc(sizeof(char) * (ft_strlen(envp[x]) + 1));
+		while (envp[x][++y])
+			envp_cp[x][y] = envp[x][y];
+		envp_cp[x][y] = '\0';
+	}
+	return (envp_cp);
+}
+
+size_t	ft_strlen_cp(char **str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{	
+		i++;
+	}
+	return (i);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*pipex;
-	int		x;
+	int		tub[2];
 
-	pipex = (t_pipex *)ft_calloc(sizeof(t_pipex), 1);
-	x = 0;
-	pipex->process = 2;
-	pipex->argc_cp = argc;
-	pipex->x = 0;
-	pipex->tub = malloc((argc - 4) * sizeof(int *));
-	while (x < argc - 4)
-	{
-		pipex->tub[x] = ft_calloc(sizeof(int), 4);
-		x++;
-	}
 	if (argc < 5)
 		msg_error("Error number of parameters");
-	x = 0;
-	while (x < argc - 4)
-	{
-		pipe(pipex->tub[x]);
-		x++;
-	}
-	x = 0;
+	pipex = (t_pipex *)ft_calloc(sizeof(t_pipex), 1);
+	pipex->process = 2;
+	pipex->argc_cp = argc;
+	pipex->envp_cp = envp_copy(envp);
+	pipex->x = 0;
 	pipex->path = find_paths(envp);
 	pipex->ruts = ft_split(pipex->path, ':');
-	recursive_process(pipex, argv, envp);
-	while (x < argc - 3)
-		waitpid(-1, NULL, 0);
+	rec_process(tub, pipex, argv);
+	close(tub[0]);
+	close(tub[1]);
+	waitpid(-1, NULL, 0);
 	return (0);
 }
 
-void	recursive_process(t_pipex *pipex, char **argv, char **envp)
+void	rec_process(int *tub_pre, t_pipex *pipex, char **argv)
 {
-	int	pid;
+	int		pid;
+	int		tub_ac[2];
 
 	pid = fork();
 	if (pid == 0)
 	{
 		if (pipex->process == 2)
 		{
-			first_child(pipex, argv, envp);
-			printf("hola\n");
+			first_child(pipex, argv, tub_pre, tub_ac);
 		}
 		if (pipex->process < pipex->argc_cp - 2)
-		{
-			printf("hola2\n");
-			mid_process(pipex, argv, envp);
-		}
+			mid_process(pipex, argv, tub_pre, tub_ac);
 		if (pipex->process == pipex->argc_cp - 2)
-		{
-			printf("hola3\n");
-			last_child(pipex, argv, envp);
-		}
+			last_child(pipex, argv, tub_pre, tub_ac);
 	}
 	else
 	{
@@ -74,69 +87,74 @@ void	recursive_process(t_pipex *pipex, char **argv, char **envp)
 		{
 			pipex->process++;
 			pipex->x++;
-			printf("holaaaa\n");
-			recursive_process(pipex, argv, envp);
+			rec_process(tub_ac, pipex, argv);
 		}
 	}
 }
 
-void	first_child(t_pipex *pipex, char **argv, char **envp)
+void	first_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 {
 	char	**cmd_arg;
 	char	*cmd;
-	int		file;
+	int		infile;
 
-	close(pipex->tub[0][0]);
-	file = open(argv[2], O_RDONLY);
-	if (file < 0)
+	infile = open(argv[1], O_RDONLY);
+	if (infile < 0)
 		msg_error("Error in first file");
-	dup2(pipex->file, 0);
-	close(pipex->file);
-	dup2(pipex->tub[0][1], 1);
-	close(pipex->tub[0][1]);
-	printf("hola\n");
+	close(tub_pre[0]);
+	close(tub_pre[1]);
+	close(tub_ac[0]);
+	dup2(infile, 0);
+	close(infile);
+	dup2(tub_ac[1], 1);
+	close(tub_ac[1]);
+	printf("holaaaa\n");
 	cmd_arg = ft_split(argv[2], ' ');
 	cmd = find_cmd(cmd_arg[0], pipex->ruts);
 	if (!cmd)
 		msg_error("ERROR: comand not found");
-	execve(cmd, cmd_arg, envp);
+	execve(cmd, cmd_arg, pipex->envp_cp);
 }
 
-void	mid_process(t_pipex *pipex, char **argv, char **envp)
+void	mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 {
 	char	**cmd_arg;
 	char	*cmd;
 
-	close(pipex->tub[pipex->x - 1][1]);
-	close(pipex->tub[pipex->x][0]);
-	dup2(pipex->tub[pipex->x - 1][0], 0);
-	close(pipex->tub[pipex->x - 1][0]);
-	dup2(pipex->tub[pipex->x][1], 1);
+	close(tub_pre[1]);
+	close(tub_ac[0]);
+	dup2(tub_pre[0], 0);
+	close(tub_pre[0]);
+	dup2(tub_ac[1], 1);
+	close(tub_ac[1]);
+	cmd_arg = ft_split(argv[pipex->process], ' ');
+	cmd = find_cmd(cmd_arg[0], pipex->ruts);
+	if (!cmd)
+		msg_error("ERROR: comand not found");
 	printf("hola\n");
-	close(pipex->tub[pipex->x][1]);
-	cmd_arg = ft_split(argv[pipex->process], ' ');
-	cmd = find_cmd(cmd_arg[0], pipex->ruts);
-	if (!cmd)
-		msg_error("ERROR: comand not found");
-	execve(cmd, cmd_arg, envp);
+	execve(cmd, cmd_arg, pipex->envp_cp);
 }
 
-void	last_child(t_pipex *pipex, char **argv, char **envp)
+void	last_child(t_pipex *pipex, char **argv,int *tub_pre, int *tub_ac)
 {
 	char	**cmd_arg;
 	char	*cmd;
-	int		file;
+	int		outfile;
 
-	file = open(argv[pipex->argc_cp - 2], O_WRONLY);
-	if (file < 0)
+	outfile = open(argv[pipex->argc_cp - 1], O_WRONLY);
+	if (outfile < 0)
 		msg_error("Error in second file");
-	dup2(pipex->tub[pipex->x][0], 0);
-	close(pipex->tub[pipex->x][0]);
-	dup2(file, 1);
-	close(file);
+	printf("hola\n");
+	close(tub_ac[0]);
+	close(tub_ac[1]);
+	close(tub_pre[1]);
+	dup2(outfile, 1);
+	close(outfile);
+	dup2(tub_pre[0], 0);
+	close(tub_pre[0]);
 	cmd_arg = ft_split(argv[pipex->process], ' ');
 	cmd = find_cmd(cmd_arg[0], pipex->ruts);
 	if (!cmd)
 		msg_error("ERROR: comand not found");
-	execve(cmd, cmd_arg, envp);
+	execve(cmd, cmd_arg, pipex->envp_cp);
 }

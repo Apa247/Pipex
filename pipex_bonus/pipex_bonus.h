@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:54:54 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/29 19:50:49 by daparici         ###   ########.fr       */
+/*   Updated: 2022/10/04 18:46:01 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,24 @@
 
 typedef struct s_pipex
 {
-	int		**tub;
 	int		*pid;
 	char	*path;
 	char	**ruts;
-	int		file;
+	char	**envp_cp;
 	int		process;
 	int		argc_cp;
 	int		x;
 }		t_pipex;
 
-void	recursive_process(t_pipex *pipex, char **argv, char **envp);
-void	first_child(t_pipex *pipex, char **argv, char **envp);
-void	mid_process(t_pipex *pipex, char **argv, char **envp);
-void	last_child(t_pipex *pipex, char **argv, char **envp);
+void	rec_process(int *tub_pre, t_pipex *pipex, char **argv);
+void	first_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
+void	mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
+void	last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
 void	msg_error(char *msg);
 void	close_parent(int *pipe);
 char	*find_paths(char **envp);
 char	*find_cmd(char *cmd, char **path);
+char	**envp_copy(char **envp);
+size_t	ft_strlen_cp(char **str);
 
 #endif
