@@ -37,7 +37,6 @@
 
 typedef struct s_pipex
 {
-	int		*pid;
 	char	*path;
 	char	**ruts;
 	char	**envp_cp;
@@ -50,7 +49,6 @@ void	first_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
 void	mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
 void	last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
 void	msg_error(char *msg);
-void	close_parent(int *pipe);
 char	*find_paths(char **envp);
 char	*find_cmd(char *cmd, char **path);
 char	**envp_copy(char **envp);

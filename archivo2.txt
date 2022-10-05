@@ -1,4 +1,5 @@
-/usr/local/bin/ls
+       0
+l/bin/ls
 /usr/bin
 /bin
 /usr/sbin

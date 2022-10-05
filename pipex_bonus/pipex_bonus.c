@@ -12,35 +12,9 @@
 
 #include "pipex_bonus.h"
 
-char	**envp_copy(char **envp)
+static void	leaks(void)
 {
-	char	**envp_cp;
-	int		x;
-	int		y;
-
-	x = -1;
-	envp_cp = malloc(sizeof(char *) * ft_strlen_cp(envp));
-	while (envp[++x])
-	{
-		y = -1;
-		envp_cp[x] = malloc(sizeof(char) * (ft_strlen(envp[x]) + 1));
-		while (envp[x][++y])
-			envp_cp[x][y] = envp[x][y];
-		envp_cp[x][y] = '\0';
-	}
-	return (envp_cp);
-}
-
-size_t	ft_strlen_cp(char **str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i])
-	{	
-		i++;
-	}
-	return (i);
+	system("leaks pipex");
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -48,18 +22,39 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	*pipex;
 	int		tub[2];
 
+	atexit(leaks);
 	if (argc < 5)
 		msg_error("Error number of parameters");
 	pipex = (t_pipex *)ft_calloc(sizeof(t_pipex), 1);
 	pipex->process = 2;
 	pipex->argc_cp = argc;
 	pipex->envp_cp = envp_copy(envp);
+	// while (*(pipex->envp_cp))
+	// {
+	// 	printf("%s\n", *(pipex->envp_cp));
+	// 	(pipex->envp_cp)++;
+	// }
+	// while (*envp)
+	// {
+	// 	printf("%s\n", *envp);
+	// 	envp++;
+	// }
 	pipex->path = find_paths(envp);
 	pipex->ruts = ft_split(pipex->path, ':');
 	pipe(tub);
 	rec_process(tub, pipex, argv);
 	close(tub[0]);
 	close(tub[1]);
+	while (*(pipex->envp_cp))
+	{
+		free(*(pipex->envp_cp));
+		(pipex->envp_cp)++;
+	}
+	while (*(pipex->ruts))
+	{
+		free(*(pipex->ruts));
+		(pipex->ruts)++;
+	}
 	waitpid(-1, NULL, 0);
 	return (0);
 }
