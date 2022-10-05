@@ -36,7 +36,7 @@ size_t	ft_strlen_cp(char **str)
 	size_t	i;
 
 	i = 0;
-	while (str[i] != '\0')
+	while (str[i])
 	{	
 		i++;
 	}
@@ -54,9 +54,9 @@ int	main(int argc, char **argv, char **envp)
 	pipex->process = 2;
 	pipex->argc_cp = argc;
 	pipex->envp_cp = envp_copy(envp);
-	pipex->x = 0;
 	pipex->path = find_paths(envp);
 	pipex->ruts = ft_split(pipex->path, ':');
+	pipe(tub);
 	rec_process(tub, pipex, argv);
 	close(tub[0]);
 	close(tub[1]);
@@ -69,13 +69,12 @@ void	rec_process(int *tub_pre, t_pipex *pipex, char **argv)
 	int		pid;
 	int		tub_ac[2];
 
+	pipe(tub_ac);
 	pid = fork();
 	if (pid == 0)
 	{
 		if (pipex->process == 2)
-		{
 			first_child(pipex, argv, tub_pre, tub_ac);
-		}
 		if (pipex->process < pipex->argc_cp - 2)
 			mid_process(pipex, argv, tub_pre, tub_ac);
 		if (pipex->process == pipex->argc_cp - 2)
@@ -85,8 +84,9 @@ void	rec_process(int *tub_pre, t_pipex *pipex, char **argv)
 	{
 		if (pipex->process < pipex->argc_cp - 2)
 		{
+			close(tub_pre[0]);
+			close(tub_pre[1]);
 			pipex->process++;
-			pipex->x++;
 			rec_process(tub_ac, pipex, argv);
 		}
 	}
@@ -108,7 +108,6 @@ void	first_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 	close(infile);
 	dup2(tub_ac[1], 1);
 	close(tub_ac[1]);
-	printf("holaaaa\n");
 	cmd_arg = ft_split(argv[2], ' ');
 	cmd = find_cmd(cmd_arg[0], pipex->ruts);
 	if (!cmd)
@@ -131,7 +130,6 @@ void	mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 	cmd = find_cmd(cmd_arg[0], pipex->ruts);
 	if (!cmd)
 		msg_error("ERROR: comand not found");
-	printf("hola\n");
 	execve(cmd, cmd_arg, pipex->envp_cp);
 }
 
@@ -141,17 +139,17 @@ void	last_child(t_pipex *pipex, char **argv,int *tub_pre, int *tub_ac)
 	char	*cmd;
 	int		outfile;
 
-	outfile = open(argv[pipex->argc_cp - 1], O_WRONLY);
+	outfile = open(argv[pipex->argc_cp - 1], O_CREAT | O_WRONLY | O_TRUNC,
+				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 	if (outfile < 0)
 		msg_error("Error in second file");
-	printf("hola\n");
 	close(tub_ac[0]);
 	close(tub_ac[1]);
 	close(tub_pre[1]);
-	dup2(outfile, 1);
-	close(outfile);
 	dup2(tub_pre[0], 0);
 	close(tub_pre[0]);
+	dup2(outfile, 1);
+	close(outfile);
 	cmd_arg = ft_split(argv[pipex->process], ' ');
 	cmd = find_cmd(cmd_arg[0], pipex->ruts);
 	if (!cmd)

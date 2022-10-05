@@ -43,7 +43,6 @@ typedef struct s_pipex
 	char	**envp_cp;
 	int		process;
 	int		argc_cp;
-	int		x;
 }		t_pipex;
 
 void	rec_process(int *tub_pre, t_pipex *pipex, char **argv);
