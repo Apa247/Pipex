@@ -1,1 +1,13 @@
-       2
+Libft
+arch1
+arch2
+archivo1.txt
+archivo2.txt
+makefile
+pipex_bonus
+pipex_bonus.c
+pipex_bonus.h
+pipex_bonus.o
+pipex_utils_bonus.c
+pipex_utils_bonus.o
+printf

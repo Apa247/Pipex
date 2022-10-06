@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 20:53:28 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/29 20:58:31 by daparici         ###   ########.fr       */
+/*   Updated: 2022/10/06 15:18:38 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,23 +48,32 @@ char	**envp_copy(char **envp)
 
 char	*find_paths(char **envp)
 {	
-	while (ft_strncmp("PATH", *envp, 4))
+	while (*envp && ft_strncmp("PATH", *envp, 4))
 		envp++;
-	return (*envp + 5);
+	if (*envp)
+		return (*envp + 5);
+	else
+		return (NULL);
 }
 
 char	*find_cmd(char *cmd, char **path)
 {
 	char	*tmp;
 
-	while (*path)
+	if (!access(cmd, X_OK))
+		return (cmd);
+	perror("hola");
+	if (path)
 	{
-		tmp = ft_strjoin(*path, "/");
-		tmp = ft_strjoin(tmp, cmd);
-		if (!access(tmp, X_OK))
-			return (tmp);
-		free(tmp);
-		path++;
+		while (*path)
+		{
+			tmp = ft_strjoin(*path, "/");
+			tmp = ft_strjoin(tmp, cmd);
+			if (!access(tmp, X_OK))
+				return (tmp);
+			free(tmp);
+			path++;
+		}
 	}
 	return (NULL);
 }

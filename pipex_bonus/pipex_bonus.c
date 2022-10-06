@@ -6,25 +6,27 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:55:49 by daparici          #+#    #+#             */
-/*   Updated: 2022/10/04 18:59:38 by daparici         ###   ########.fr       */
+/*   Updated: 2022/10/06 15:45:33 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static void	leaks(void)
-{
-	system("leaks pipex");
-}
+// static void	leaks(void)
+// {
+// 	system("leaks pipex");
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*pipex;
 	int		tub[2];
 
-	atexit(leaks);
+	//atexit(leaks);
 	if (argc < 5)
 		msg_error("Error number of parameters");
+	if (!*envp)
+		msg_error("Command not found");
 	pipex = (t_pipex *)ft_calloc(sizeof(t_pipex), 1);
 	pipex->process = 2;
 	pipex->argc_cp = argc;
@@ -56,7 +58,7 @@ int	main(int argc, char **argv, char **envp)
 		(pipex->ruts)++;
 	}
 	waitpid(-1, NULL, 0);
-	return (0);
+	exit(0);
 }
 
 void	rec_process(int *tub_pre, t_pipex *pipex, char **argv)
@@ -128,14 +130,14 @@ void	mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 	execve(cmd, cmd_arg, pipex->envp_cp);
 }
 
-void	last_child(t_pipex *pipex, char **argv,int *tub_pre, int *tub_ac)
+void	last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 {
 	char	**cmd_arg;
 	char	*cmd;
 	int		outfile;
 
 	outfile = open(argv[pipex->argc_cp - 1], O_CREAT | O_WRONLY | O_TRUNC,
-				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 	if (outfile < 0)
 		msg_error("Error in second file");
 	close(tub_ac[0]);
