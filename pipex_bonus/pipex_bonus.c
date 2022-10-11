@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:55:49 by daparici          #+#    #+#             */
-/*   Updated: 2022/10/06 15:45:33 by daparici         ###   ########.fr       */
+/*   Updated: 2022/10/11 22:14:36 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,23 @@
 // 	system("leaks pipex");
 // }
 
-int	main(int argc, char **argv, char **envp)
+int	check_here_doc(t_pipex *pipex, char **argv, int argc)
 {
-	t_pipex	*pipex;
-	int		tub[2];
+	if (ft_strlen(argv[1]) != 8 && ft)
+}
 
-	//atexit(leaks);
-	if (argc < 5)
-		msg_error("Error number of parameters");
-	if (!*envp)
-		msg_error("Command not found");
-	pipex = (t_pipex *)ft_calloc(sizeof(t_pipex), 1);
+t_pipex	params_innit(t_pipex *pipex, int argc)
+{
 	pipex->process = 2;
 	pipex->argc_cp = argc;
 	pipex->envp_cp = envp_copy(envp);
-	// while (*(pipex->envp_cp))
-	// {
-	// 	printf("%s\n", *(pipex->envp_cp));
-	// 	(pipex->envp_cp)++;
-	// }
-	// while (*envp)
-	// {
-	// 	printf("%s\n", *envp);
-	// 	envp++;
-	// }
 	pipex->path = find_paths(envp);
 	pipex->ruts = ft_split(pipex->path, ':');
-	pipe(tub);
-	rec_process(tub, pipex, argv);
+	return (pipex);
+}
+
+void	close_parent(t_pipex *pipex, int *tub)
+{
 	close(tub[0]);
 	close(tub[1]);
 	while (*(pipex->envp_cp))
@@ -58,6 +47,25 @@ int	main(int argc, char **argv, char **envp)
 		(pipex->ruts)++;
 	}
 	waitpid(-1, NULL, 0);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_pipex	*pipex;
+	int		tub[2];
+	int		here_doc;
+
+	//atexit(leaks);
+	if (argc < 5)
+		msg_error("Error number of parameters");
+	if (!*envp)
+		msg_error("Command not found");
+	pipex = (t_pipex *)ft_calloc(sizeof(t_pipex), 1);
+	here_doc = check_here_doc(pipex, argv, argc);
+	params_innit(pipex, argc);
+	pipe(tub);
+	rec_process(tub, pipex, argv);
+	close_parent(pipex, tub);
 	exit(0);
 }
 
@@ -137,7 +145,7 @@ void	last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 	int		outfile;
 
 	outfile = open(argv[pipex->argc_cp - 1], O_CREAT | O_WRONLY | O_TRUNC,
-			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | O_APPEND);
 	if (outfile < 0)
 		msg_error("Error in second file");
 	close(tub_ac[0]);

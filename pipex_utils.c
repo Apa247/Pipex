@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:39:09 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/27 20:23:07 by daparici         ###   ########.fr       */
+/*   Updated: 2022/10/11 20:13:07 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	msg_error(char *msg)
 void	close_parent(int *pipe)
 {
 	close(pipe[0]);
-	wait(NULL);
 	waitpid(-1, NULL, 0);
 }
 

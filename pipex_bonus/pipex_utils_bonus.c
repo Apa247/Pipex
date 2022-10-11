@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 20:53:28 by daparici          #+#    #+#             */
-/*   Updated: 2022/10/06 15:18:38 by daparici         ###   ########.fr       */
+/*   Updated: 2022/10/11 19:37:30 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ char	*find_cmd(char *cmd, char **path)
 
 	if (!access(cmd, X_OK))
 		return (cmd);
-	perror("hola");
 	if (path)
 	{
 		while (*path)

@@ -1,6 +1,1 @@
-/usr/local/bin/ls
-/usr/bin
-/bin
-/usr/sbin
-/sbin
-/usr/local/munki
+ Ls | cat | grep 

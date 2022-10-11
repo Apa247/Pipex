@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:54:54 by daparici          #+#    #+#             */
-/*   Updated: 2022/10/04 18:46:01 by daparici         ###   ########.fr       */
+/*   Updated: 2022/10/11 22:11:25 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,20 @@ typedef struct s_pipex
 	char	**envp_cp;
 	int		process;
 	int		argc_cp;
+	int		infile;
 }		t_pipex;
 
-void	rec_process(int *tub_pre, t_pipex *pipex, char **argv);
-void	first_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
-void	mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
-void	last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
-void	msg_error(char *msg);
-char	*find_paths(char **envp);
-char	*find_cmd(char *cmd, char **path);
-char	**envp_copy(char **envp);
-size_t	ft_strlen_cp(char **str);
+int			check_here_doc(t_pipex *pipex, char **argv, int argc);
+t_pipex		params_innit(t_pipex *pipex, int argc);
+void		close_parent(t_pipex *pipex, int *tub);
+void		rec_process(int *tub_pre, t_pipex *pipex, char **argv);
+void		first_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
+void		mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
+void		last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
+void		msg_error(char *msg);
+char		*find_paths(char **envp);
+char		*find_cmd(char *cmd, char **path);
+char		**envp_copy(char **envp);
+size_t		ft_strlen_cp(char **str);
 
 #endif
