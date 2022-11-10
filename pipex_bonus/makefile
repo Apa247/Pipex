@@ -20,13 +20,16 @@ SRCS = pipex_bonus.c pipex_utils_bonus.c
 LIBFT = ./Libft/libft.a
 
 PRINTF = ./printf/libftprintf.a
+GNL = get_next_line.c get_next_line_utils.c
+GNLPATH = $(addprefix ./GetNextLine/,$(GNL))
 
 OBJS = ${SRCS:.c=.o}
+GNLOBJ = $(GNLPATH:.c=.o)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(GNLOBJ)
 		make bonus -C ./Libft;
 		make bonus -C ./printf;
-		$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(PRINTF) -o $(NAME)
+		$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(GNLOBJ) $(PRINTF) -o $(NAME)
 all: $(NAME)
 
 clean:

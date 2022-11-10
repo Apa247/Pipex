@@ -1,5 +1,1 @@
-arch1
-arch2
-archivo1.txt
-archivo2.txt
-makefile
+fin

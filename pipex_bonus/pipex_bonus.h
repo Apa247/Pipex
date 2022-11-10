@@ -23,7 +23,7 @@
 # include <fcntl.h>
 # include <limits.h>
 # include "./Libft/libft.h"
-//# include "./GetNextLine/get_next_line.h"
+# include "./GetNextLine/get_next_line.h"
 # include "./printf/ft_printf.h"
 # include <OpenGL/gl.h>
 # include <OpenGl/glu.h>
@@ -43,12 +43,15 @@ typedef struct s_pipex
 	int		process;
 	int		argc_cp;
 	int		infile;
+	char	*limit;
+	int		here_doc;
 }		t_pipex;
 
-int			check_here_doc(t_pipex *pipex, char **argv, int argc);
-t_pipex		params_innit(t_pipex *pipex, int argc);
+void		check_here_doc(t_pipex *pipex, char **argv);
+t_pipex		*params_innit(t_pipex *pipex, int argc, char **envp, char **argv);
 void		close_parent(t_pipex *pipex, int *tub);
 void		rec_process(int *tub_pre, t_pipex *pipex, char **argv);
+void		rec_process_2(int *tub_pre, t_pipex *pipex, char **argv);
 void		first_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
 void		mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
 void		last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);

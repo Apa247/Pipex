@@ -17,14 +17,42 @@
 // 	system("leaks pipex");
 // }
 
-int	check_here_doc(t_pipex *pipex, char **argv, int argc)
+void	check_here_doc(t_pipex *pipex, char **argv)
 {
-	if (ft_strlen(argv[1]) != 8 && ft)
+	int		pipe[2];
+	char	*line;
+
+	if (ft_strlen(argv[1]) == 8 && !ft_strncmp(argv[1], "here_doc", 8))
+	{
+
+		pipex->limit = ft_substr(argv[2], 0, ft_strlen(argv[2]));
+		line = get_next_line(0);
+		while (ft_strlen(pipex->limit) != (ft_strlen(line) - 1) &&
+			ft_strncmp(line, pipex->limit, ft_strlen(pipex->limit)))
+		{
+			ft_putstr_fd(line, pipe[1]);
+			free(line);
+			line = get_next_line(0);
+		}
+		free(line);
+		pipex->infile = pipe[0];
+		pipex->here_doc = 1;
+	}
+	else
+		pipex->here_doc = 0;
 }
 
-t_pipex	params_innit(t_pipex *pipex, int argc)
+t_pipex	*params_innit(t_pipex *pipex, int argc, char **envp, char **argv)
 {
-	pipex->process = 2;
+	if (pipex->here_doc == 1)
+		pipex->process = 3;
+	else if (pipex->here_doc == 0)
+	{
+		pipex->process = 2;
+		pipex->infile = open(argv[1], O_RDONLY);
+		if (pipex->infile < 0)
+			msg_error("Error in first file");
+	}
 	pipex->argc_cp = argc;
 	pipex->envp_cp = envp_copy(envp);
 	pipex->path = find_paths(envp);
@@ -53,7 +81,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*pipex;
 	int		tub[2];
-	int		here_doc;
 
 	//atexit(leaks);
 	if (argc < 5)
@@ -61,9 +88,12 @@ int	main(int argc, char **argv, char **envp)
 	if (!*envp)
 		msg_error("Command not found");
 	pipex = (t_pipex *)ft_calloc(sizeof(t_pipex), 1);
-	here_doc = check_here_doc(pipex, argv, argc);
-	params_innit(pipex, argc);
+	check_here_doc(pipex, argv);
+	params_innit(pipex, argc, envp, argv);
 	pipe(tub);
+	// if (pipex->here_doc == 1)
+	// 	rec_process_2(tub, pipex, argv);
+	// else if (pipex->here_doc == 0)
 	rec_process(tub, pipex, argv);
 	close_parent(pipex, tub);
 	exit(0);
@@ -78,7 +108,9 @@ void	rec_process(int *tub_pre, t_pipex *pipex, char **argv)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (pipex->process == 2)
+		if (pipex->process == 2 && pipex->here_doc == 0)
+			first_child(pipex, argv, tub_pre, tub_ac);
+		if (pipex->process == 3 && pipex->here_doc == 1)
 			first_child(pipex, argv, tub_pre, tub_ac);
 		if (pipex->process < pipex->argc_cp - 2)
 			mid_process(pipex, argv, tub_pre, tub_ac);
@@ -101,22 +133,18 @@ void	first_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 {
 	char	**cmd_arg;
 	char	*cmd;
-	int		infile;
 
-	infile = open(argv[1], O_RDONLY);
-	if (infile < 0)
-		msg_error("Error in first file");
 	close(tub_pre[0]);
 	close(tub_pre[1]);
 	close(tub_ac[0]);
-	dup2(infile, 0);
-	close(infile);
+	dup2(pipex->infile, 0);
+	close(pipex->infile);
 	dup2(tub_ac[1], 1);
 	close(tub_ac[1]);
-	cmd_arg = ft_split(argv[2], ' ');
+	cmd_arg = ft_split(argv[pipex->process], ' ');
 	cmd = find_cmd(cmd_arg[0], pipex->ruts);
 	if (!cmd)
-		msg_error("ERROR: comand not found");
+		msg_error("ERROR: comand 1 not found");
 	execve(cmd, cmd_arg, pipex->envp_cp);
 }
 
@@ -134,7 +162,7 @@ void	mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 	cmd_arg = ft_split(argv[pipex->process], ' ');
 	cmd = find_cmd(cmd_arg[0], pipex->ruts);
 	if (!cmd)
-		msg_error("ERROR: comand not found");
+		msg_error("ERROR: comand mid not found");
 	execve(cmd, cmd_arg, pipex->envp_cp);
 }
 
@@ -158,6 +186,6 @@ void	last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 	cmd_arg = ft_split(argv[pipex->process], ' ');
 	cmd = find_cmd(cmd_arg[0], pipex->ruts);
 	if (!cmd)
-		msg_error("ERROR: comand not found");
+		msg_error("ERROR: final comand not found");
 	execve(cmd, cmd_arg, pipex->envp_cp);
 }
