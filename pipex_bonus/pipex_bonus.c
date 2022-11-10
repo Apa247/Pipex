@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:55:49 by daparici          #+#    #+#             */
-/*   Updated: 2022/10/11 22:14:36 by daparici         ###   ########.fr       */
+/*   Updated: 2022/11/10 19:03:46 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,25 @@
 
 void	check_here_doc(t_pipex *pipex, char **argv)
 {
-	int		pipe[2];
+	int		pipe1[2];
 	char	*line;
 
+	pipe(pipe1);
 	if (ft_strlen(argv[1]) == 8 && !ft_strncmp(argv[1], "here_doc", 8))
 	{
 
 		pipex->limit = ft_substr(argv[2], 0, ft_strlen(argv[2]));
 		line = get_next_line(0);
-		while (ft_strlen(pipex->limit) != (ft_strlen(line) - 1) &&
-			ft_strncmp(line, pipex->limit, ft_strlen(pipex->limit)))
+		while (ft_strlen(pipex->limit) != (ft_strlen(line) - 1)
+			&& ft_strncmp(line, pipex->limit, ft_strlen(pipex->limit)))
 		{
-			ft_putstr_fd(line, pipe[1]);
+			ft_putstr_fd(line, pipe1[1]);
 			free(line);
 			line = get_next_line(0);
 		}
 		free(line);
-		pipex->infile = pipe[0];
+		close(pipe1[1]);
+		pipex->infile = pipe1[0];
 		pipex->here_doc = 1;
 	}
 	else
@@ -91,9 +93,6 @@ int	main(int argc, char **argv, char **envp)
 	check_here_doc(pipex, argv);
 	params_innit(pipex, argc, envp, argv);
 	pipe(tub);
-	// if (pipex->here_doc == 1)
-	// 	rec_process_2(tub, pipex, argv);
-	// else if (pipex->here_doc == 0)
 	rec_process(tub, pipex, argv);
 	close_parent(pipex, tub);
 	exit(0);
