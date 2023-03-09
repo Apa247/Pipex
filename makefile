@@ -6,7 +6,7 @@
 #    By: daparici <daparici@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/20 13:59:15 by daparici          #+#    #+#              #
-#    Updated: 2022/09/27 19:45:54 by daparici         ###   ########.fr        #
+#    Updated: 2023/03/09 12:30:18 by daparici         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC = gcc
 CFLAGS = -Wall -Werror -Wextra# -g -fsanitize=address -g3
 AR = ar rcs
 
-SRCS = pipex.c pipex_utils.c
+SRCS = pipex.c pipex_utils.c 
 
 LIBFT = ./Libft/libft.a
 

@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:54:54 by daparici          #+#    #+#             */
-/*   Updated: 2022/10/11 22:11:25 by daparici         ###   ########.fr       */
+/*   Updated: 2023/03/09 11:53:40 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_pipex
 	int		here_doc;
 }		t_pipex;
 
-void		check_here_doc(t_pipex *pipex, char **argv);
+t_pipex		*check_here_doc(t_pipex *pipex, char **argv);
 t_pipex		*params_innit(t_pipex *pipex, int argc, char **envp, char **argv);
 void		close_parent(t_pipex *pipex, int *tub);
 void		rec_process(int *tub_pre, t_pipex *pipex, char **argv);
