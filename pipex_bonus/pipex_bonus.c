@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:55:49 by daparici          #+#    #+#             */
-/*   Updated: 2023/04/06 15:55:11 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/06 18:20:59 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	close_parent(t_pipex *pipex, int *tub)
 		(pipex->ruts)++;
 	}
 	waitpid(-1, NULL, 0);
+	free(pipex->pipchild);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -113,6 +114,7 @@ void	rec_process(int *tub_pre, t_pipex *pipex, char **argv)
 
 	pipe(tub_ac);
 	pipex->pipchild[pipex->index_pipchild] = fork();
+	printf("%i\n", pipex->process);
 	if (pipex->pipchild == 0)
 	{
 		if ((pipex->process == 2 && pipex->here_doc == 0)
