@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 12:28:01 by daparici          #+#    #+#             */
-/*   Updated: 2023/04/06 13:02:21 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/06 19:22:19 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ void	first_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 	if (!cmd)
 		msg_error("ERROR: comand 1 not found");
 	if (!execve(cmd, cmd_arg, pipex->envp_cp))
-	{
-		perror("Error in execve in first process");
-		exit(127);
-	}
+		msg_error_cmd("Error to finish process");
 }
 
 void	mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
@@ -55,10 +52,7 @@ void	mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 	if (!cmd)
 		msg_error("ERROR: comand mid not found");
 	if (execve(cmd, cmd_arg, pipex->envp_cp) < 0)
-	{
-		perror("Error in execve in first process");
-		exit(127);
-	}
+		msg_error_cmd("Error to finish process");
 }
 
 void	last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
@@ -85,10 +79,7 @@ void	last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac)
 	if (!cmd)
 		msg_error("ERROR: final comand not found");
 	if (execve(cmd, cmd_arg, pipex->envp_cp) < 0)
-	{
-		perror("Error in execve in first process");
-		exit(127);
-	}
+		msg_error_cmd("Error to finish process");
 }
 
 void	msg_error_cmd(char *cmd)
