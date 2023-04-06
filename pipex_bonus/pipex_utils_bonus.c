@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 20:53:28 by daparici          #+#    #+#             */
-/*   Updated: 2022/10/11 19:37:30 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/06 12:48:34 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ char	*find_cmd(char *cmd, char **path)
 			free(tmp);
 			path++;
 		}
+		msg_error_cmd(cmd);
 	}
 	return (NULL);
 }

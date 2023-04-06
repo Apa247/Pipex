@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:54:54 by daparici          #+#    #+#             */
-/*   Updated: 2023/03/09 11:53:40 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/06 13:29:25 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,16 @@
 
 typedef struct s_pipex
 {
-	char	*path;
-	char	**ruts;
-	char	**envp_cp;
-	int		process;
-	int		argc_cp;
-	int		infile;
-	char	*limit;
-	int		here_doc;
+	char		*path;
+	char		**ruts;
+	char		**envp_cp;
+	int			process;
+	int			argc_cp;
+	int			infile;
+	char		*limit;
+	int			here_doc;
+	pid_t		*pipchild;
+	int			index_pipchild;
 }		t_pipex;
 
 t_pipex		*check_here_doc(t_pipex *pipex, char **argv);
@@ -60,5 +62,6 @@ char		*find_paths(char **envp);
 char		*find_cmd(char *cmd, char **path);
 char		**envp_copy(char **envp);
 size_t		ft_strlen_cp(char **str);
+void		msg_error_cmd(char *msg);
 
 #endif

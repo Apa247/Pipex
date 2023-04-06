@@ -1,2 +1,13 @@
-/usr/local/bin/ls
-/usr/local/munki
+Libft
+Pipex.pdf
+archivo1.txt
+archivo2.txt
+makefile
+pipex
+pipex.c
+pipex.h
+pipex.o
+pipex_bonus
+pipex_utils.c
+pipex_utils.o
+printf
