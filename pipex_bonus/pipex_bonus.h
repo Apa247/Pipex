@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:54:54 by daparici          #+#    #+#             */
-/*   Updated: 2023/04/06 17:50:42 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/06 18:56:54 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ typedef struct s_pipex
 	int			infile;
 	char		*limit;
 	int			here_doc;
-	pid_t		*pipchild;
-	int			index_pipchild;
+	int			*pidchild;		
+	int			index_pidchild;
 }		t_pipex;
 
 t_pipex		*check_here_doc(t_pipex *pipex, char **argv);

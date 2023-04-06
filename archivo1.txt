@@ -1,1 +1,14 @@
- Ls | cat | grep 
+El término "cuerpo negro" se usa en física
+para denominar a un emisor ideal. Esto es,
+un material capaz de absorber y emitir
+energía de todas las frecuencias.
+Actualmente el material que más se
+aproxima al emisor ideal fue fabricado en
+2008 y está construido a base de nanotubos
+de carbono. Absorbe (y por tanto puede
+emitir) el 99,955% de la energía que recibe.
+El análisis del espectro de la energía
+emitida por un cuerpo negro presentaba
+notables diferencias con lo que el modelo
+teórico de la física clásica predecía a finales
+del s XIX. 

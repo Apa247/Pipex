@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:55:49 by daparici          #+#    #+#             */
-/*   Updated: 2023/04/06 18:20:59 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/06 19:16:52 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,21 +49,21 @@ t_pipex	*params_innit(t_pipex *pipex, int argc, char **envp, char **argv)
 	if (pipex->here_doc == 1)
 	{
 		pipex->process = 3;
-		pipex->pipchild = ft_calloc((argc - 3), sizeof(int));
-		if (!pipex->pipchild)
-			msg_error("Error creating pipchild");
+		pipex->pidchild = ft_calloc((argc - 4), sizeof(int));
+		if (!pipex->pidchild)
+			msg_error("Error creating pidchild");
 	}
 	else if (pipex->here_doc == 0)
 	{
 		pipex->process = 2;
-		pipex->pipchild = ft_calloc((argc - 2), sizeof(int));
-		if (!pipex->pipchild)
-			msg_error("Error creating pipchild");
+		pipex->pidchild = ft_calloc((argc - 3), sizeof(int));
+		if (!pipex->pidchild)
+			msg_error("Error creating pidchild");
 		pipex->infile = open(argv[1], O_RDONLY);
 		if (pipex->infile < 0)
 			msg_error("Error in first file");
 	}
-	pipex->index_pipchild = 0;
+	pipex->index_pidchild = 0;
 	pipex->argc_cp = argc;
 	pipex->envp_cp = envp_copy(envp);
 	pipex->path = find_paths(envp);
@@ -86,7 +86,6 @@ void	close_parent(t_pipex *pipex, int *tub)
 		(pipex->ruts)++;
 	}
 	waitpid(-1, NULL, 0);
-	free(pipex->pipchild);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -113,9 +112,8 @@ void	rec_process(int *tub_pre, t_pipex *pipex, char **argv)
 	int		tub_ac[2];
 
 	pipe(tub_ac);
-	pipex->pipchild[pipex->index_pipchild] = fork();
-	printf("%i\n", pipex->process);
-	if (pipex->pipchild == 0)
+	pipex->pidchild[pipex->index_pidchild] = fork();
+	if (pipex->pidchild[pipex->index_pidchild] == 0)
 	{
 		if ((pipex->process == 2 && pipex->here_doc == 0)
 			|| (pipex->process == 3 && pipex->here_doc == 1))
@@ -132,9 +130,8 @@ void	rec_process(int *tub_pre, t_pipex *pipex, char **argv)
 			close(tub_pre[0]);
 			close(tub_pre[1]);
 			pipex->process++;
-			pipex->index_pipchild++;
+			pipex->index_pidchild++;
 			rec_process(tub_ac, pipex, argv);
 		}
 	}
 }
-
