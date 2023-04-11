@@ -6,7 +6,7 @@
 #    By: daparici <daparici@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/20 13:59:15 by daparici          #+#    #+#              #
-#    Updated: 2023/03/09 12:30:18 by daparici         ###   ########.fr        #
+#    Updated: 2023/04/11 12:39:00 by daparici         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ OBJS = ${SRCS:.c=.o}
 
 $(NAME): $(OBJS)
 		make bonus -C ./Libft;
-		make bonus -C ./printf;
+		make -C ./printf;
 		$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(PRINTF) -o $(NAME)
 all: $(NAME)
 
@@ -33,5 +33,7 @@ clean:
 	$(RM) $(OBJS)
 fclean: clean
 	$(RM) $(NAME)
+	make fclean -C ./Libft;
+	make fclean -C ./printf;
 re: clean all
 .PHONY: bonus all clean fclean re

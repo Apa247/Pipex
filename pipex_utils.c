@@ -6,16 +6,19 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:39:09 by daparici          #+#    #+#             */
-/*   Updated: 2022/10/11 20:13:07 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/11 13:13:25 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	msg_error(char *msg)
+void	msg_error(char *msg, int type_error, int cd_error)
 {
-	ft_printf("%s\n", msg);
-	exit(1);
+	if (type_error == 1)
+	{
+		ft_printf("%s\n", msg);
+		exit(1);
+	}
 }
 
 void	close_parent(int *pipe)
@@ -35,14 +38,20 @@ char	*find_cmd(char *cmd, char **path)
 {
 	char	*tmp;
 
-	while (*path)
+	if (!access(cmd, X_OK))
+		return (cmd);
+	if (path)
 	{
-		tmp = ft_strjoin(*path, "/");
-		tmp = ft_strjoin(tmp, cmd);
-		if (!access(tmp, X_OK))
-			return (tmp);
-		free(tmp);
-		path++;
+		while (*path)
+		{
+			tmp = ft_strjoin(*path, "/");
+			tmp = ft_strjoin(tmp, cmd);
+			if (!access(tmp, X_OK))
+				return (tmp);
+			free(tmp);
+			path++;
+		}
+		msg_error_cmd(cmd);
 	}
 	return (NULL);
 }

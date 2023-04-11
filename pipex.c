@@ -6,35 +6,35 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 17:18:30 by daparici          #+#    #+#             */
-/*   Updated: 2022/10/11 20:15:15 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/11 13:17:19 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	leaks(void)
-{
-	system("leaks pipex");
-}
+// static void	leaks(void)
+// {
+// 	system("leaks pipex");
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
 	int	tub[2];
 	int	pid;
 
-	atexit(leaks);
+	// atexit(leaks);
 	if (argc != 5)
-		msg_error("ERROR: Invalid number of arguments");
+		msg_error("ERROR: Invalid number of arguments", ARG_ERROR, errno);
 	pipe(tub);
 	pid = fork();
 	if (pid == -1)
-		msg_error("Error in first process");
+		msg_error("Error in first process", PROC_ERROR, errno);
 	if (pid == 0)
 		first_child(tub, argv, envp);
 	close(tub[1]);
 	pid = fork();
 	if (pid == -1)
-		msg_error("Error in second process");
+		msg_error("Error in second process", PROC_ERROR, errno);
 	if (pid == 0)
 		second_child(tub, argv, envp);
 	close_parent(tub);
@@ -52,7 +52,7 @@ void	first_child(int *pipe, char **argv, char **envp)
 	close(pipe[0]);
 	file = open(argv[1], O_RDONLY);
 	if (file < 0)
-		msg_error("Error in first file");
+		msg_error("Error in first file", FILE_ERROR, errno);
 	dup2(file, 0);
 	close(file);
 	dup2(pipe[1], 1);

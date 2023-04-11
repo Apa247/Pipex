@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 22:17:36 by daparici          #+#    #+#             */
-/*   Updated: 2022/09/27 19:40:43 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/11 13:16:44 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,19 @@
 # include <sys/uio.h>
 /* waitpid, wait */
 # include <sys/wait.h>
+// para codigo de errores
+# include <errno.h>
+//definir tipo de errores
+# define ARG_ERROR 1
+# define PROC_ERROR 2
+# define FILE_ERROR 3
+
+
 
 char	*find_paths(char **envp);
 char	*find_cmd(char *cmd, char **path);
 void	first_child(int *pipe, char **argv, char **envp);
 void	second_child(int *pipe, char **argv, char **envp);
-void	msg_error(char *msg);
+void	msg_error(char *msg, int type_error, int cd_error);
 void	close_parent(int *pipe);
 #endif
