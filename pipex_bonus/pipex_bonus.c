@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:55:49 by daparici          #+#    #+#             */
-/*   Updated: 2023/04/12 12:38:45 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/12 13:03:29 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,17 @@ t_pipex	*params_innit(t_pipex *pipex, int argc, char **envp, char **argv)
 		pipex->process = 3;
 		pipex->pidchild = ft_calloc((argc - 4), sizeof(int));
 		if (!pipex->pidchild)
-			msg_error("Error creating pidchild");
+			msg_error("Error creating pidchild", 1, 1);
 	}
 	else if (pipex->here_doc == 0)
 	{
 		pipex->process = 2;
 		pipex->pidchild = ft_calloc((argc - 3), sizeof(int));
 		if (!pipex->pidchild)
-			msg_error("Error creating pidchild");
+			msg_error("Error creating pidchild", 1, 1);
 		pipex->infile = open(argv[1], O_RDONLY);
 		if (pipex->infile < 0)
-			msg_error("Error in first file");
+			msg_error("Bad file descriptor", 1, errno);
 	}
 	pipex->index_pidchild = 0;
 	pipex->argc_cp = argc;
@@ -85,7 +85,6 @@ void	close_parent(t_pipex *pipex, int *tub)
 		free(*(pipex->ruts));
 		(pipex->ruts)++;
 	}
-	waitpid(ft_strlen, NULL, 0);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -104,6 +103,7 @@ int	main(int argc, char **argv, char **envp)
 	pipe(tub);
 	rec_process(tub, pipex, argv);
 	close_parent(pipex, tub);
+	waitpid(ft_strlen_pid(pipex->pidchild) - 1, &pipex->status, 0);
 	return (WEXITSTATUS(pipex->status));
 }
 

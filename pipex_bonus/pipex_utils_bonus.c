@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 20:53:28 by daparici          #+#    #+#             */
-/*   Updated: 2023/04/12 12:49:05 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/12 13:08:30 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	msg_error(char *msg, int type_error, int cd_error)
 	if (type_error == 2)
 	{
 		ft_putstr_fd("command not found: ", 2);
-		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(msg, 2);
 		ft_putstr_fd("\n", 2);
-		exit(cd_error);
+		exit(127);
 	}
 }
 
