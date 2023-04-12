@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:55:49 by daparici          #+#    #+#             */
-/*   Updated: 2023/04/06 19:16:52 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/12 12:38:45 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	close_parent(t_pipex *pipex, int *tub)
 		free(*(pipex->ruts));
 		(pipex->ruts)++;
 	}
-	waitpid(-1, NULL, 0);
+	waitpid(ft_strlen, NULL, 0);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -95,16 +95,16 @@ int	main(int argc, char **argv, char **envp)
 
 	//atexit(leaks);
 	if (argc < 5)
-		msg_error("Error number of parameters");
+		msg_error("Error number of parameters", 1, 1);
 	if (!*envp)
-		msg_error("Command not found");
+		msg_error("envp not found", 1, 1);
 	pipex = (t_pipex *)ft_calloc(sizeof(t_pipex), 1);
 	pipex = check_here_doc(pipex, argv);
 	params_innit(pipex, argc, envp, argv);
 	pipe(tub);
 	rec_process(tub, pipex, argv);
 	close_parent(pipex, tub);
-	exit(0);
+	return (WEXITSTATUS(pipex->status));
 }
 
 void	rec_process(int *tub_pre, t_pipex *pipex, char **argv)

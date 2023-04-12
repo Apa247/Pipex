@@ -6,16 +6,26 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 20:53:28 by daparici          #+#    #+#             */
-/*   Updated: 2023/04/06 12:48:34 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/12 12:49:05 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	msg_error(char *msg)
+void	msg_error(char *msg, int type_error, int cd_error)
 {
-	ft_printf("%s\n", msg);
-	exit(1);
+	if (type_error == 1)
+	{
+		perror(msg);
+		exit(cd_error);
+	}
+	if (type_error == 2)
+	{
+		ft_putstr_fd("command not found: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd("\n", 2);
+		exit(cd_error);
+	}
 }
 
 char	**envp_copy(char **envp)
@@ -73,12 +83,24 @@ char	*find_cmd(char *cmd, char **path)
 			free(tmp);
 			path++;
 		}
-		msg_error_cmd(cmd);
+		msg_error(cmd, 2, 127);
 	}
 	return (NULL);
 }
 
 size_t	ft_strlen_cp(char **str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+	{	
+		i++;
+	}
+	return (i);
+}
+
+size_t	ft_strlen_pid(int *str)
 {
 	size_t	i;
 

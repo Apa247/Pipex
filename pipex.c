@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 17:18:30 by daparici          #+#    #+#             */
-/*   Updated: 2023/04/11 13:17:19 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/12 11:37:36 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ void	second_child(int *pipe, char **argv, char **envp)
 	char	*cmd;
 	int		file;
 
-	file = open(argv[4], O_WRONLY);
+	file = open(argv[4], O_CREAT | O_WRONLY | O_TRUNC,
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | O_APPEND);
 	if (file < 0)
 		msg_error("Error in first file");
 	dup2(pipe[0], 0);

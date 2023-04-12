@@ -6,7 +6,7 @@
 /*   By: daparici <daparici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 19:54:54 by daparici          #+#    #+#             */
-/*   Updated: 2023/04/06 18:56:54 by daparici         ###   ########.fr       */
+/*   Updated: 2023/04/12 12:39:36 by daparici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 # include <sys/uio.h>
 /* waitpid, wait */
 # include <sys/wait.h>
+// para codigo de errores
+# include <errno.h>
 
 typedef struct s_pipex
 {
@@ -45,7 +47,8 @@ typedef struct s_pipex
 	int			infile;
 	char		*limit;
 	int			here_doc;
-	int			*pidchild;		
+	int			*pidchild;
+	int			status;
 	int			index_pidchild;
 }		t_pipex;
 
@@ -57,11 +60,12 @@ void		rec_process_2(int *tub_pre, t_pipex *pipex, char **argv);
 void		first_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
 void		mid_process(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
 void		last_child(t_pipex *pipex, char **argv, int *tub_pre, int *tub_ac);
-void		msg_error(char *msg);
+void		msg_error(char *msg, int type_error, int cd_error);
 char		*find_paths(char **envp);
 char		*find_cmd(char *cmd, char **path);
 char		**envp_copy(char **envp);
 size_t		ft_strlen_cp(char **str);
+size_t		ft_strlen_pid(int *str);
 void		msg_error_cmd(char *msg);
 
 #endif
